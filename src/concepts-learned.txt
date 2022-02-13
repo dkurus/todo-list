@@ -1,0 +1,27 @@
+1. events
+- event object
+- delegation
+- bubbling phase (propagation) vs capturing phase
+
+2. css
+
+3. arrow function short syntax (when to remove ( ) and { } and when implicit return happens
+
+4. each instance comes with the context and closures it was invoked with 
+
+5. organizing code
+- (iife for data, only attaching methods related to controlling it (add,remove, edit)) 
+- seperating dom and state.
+
+6. immutability   
+- better to create and delete rather than transform 1 value mulitple times
+
+7. debugger tool shows you all the variable values when you breakpoint
+
+8. webpack should be set in development mode while developing for features like debugger to work properly.
+
+WHAT I WANT TO LEARN ABOUT
+
+1. <this> keyword 
+- when is it useful
+- where can i use it 

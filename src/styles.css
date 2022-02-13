@@ -1,0 +1,52 @@
+.contentWrapper{
+    border: 2px solid black;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pageHeader {
+    border: 2px solid rgb(241, 15, 15);
+    flex-basis: 100%;
+}
+
+.projectNav {
+    padding-right: 100px;
+}
+
+.newTaskCard > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.taskSimpleCard {
+    border-bottom: 1px solid rgba(211,211,211);
+
+}
+
+.taskCardTitle {
+    font-size: large;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.taskCardDescription {
+    font-size: medium;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.taskCardDueDate {
+    font-size: small;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.focusViewWrap {
+    display: flex;
+}
+
+.focusViewCard {
+    display: flex;
+    flex-direction: column;
+    
+}
