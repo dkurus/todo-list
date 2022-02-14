@@ -144,7 +144,6 @@ const focusViewCloseEvents = () => {
     })
 }
 
-focusViewCloseEvents();
 
 //deletes the task from simpleView in dom
 const focusViewDelete = (ev) => {
@@ -166,4 +165,4 @@ document.body.addEventListener('click', ev => {
 
 
 
-export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler}
+export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler, focusViewCloseEvents}

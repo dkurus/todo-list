@@ -11,20 +11,15 @@ const tasksList = (() => {
             description: 'des2',
             dueDate: 'due2',
             id: '1'
-
         }
     ];
     const add = (taskObj) => {
         tasksArr.push(taskObj);
     };
     //change to recreate new array? so that we follow immutability principles
-    const remove = (taskID) => {
-        tasksArr.forEach((element, index) => {
-            if (element.id == taskID){
-                tasksArr.splice(index, 1);
-            };
-        });
-    };
+    const remove = taskId => {
+        tasksArr = tasksArr.filter(taskObj => taskObj.id !== taskId);
+    }
     const getCurrentArr = () => [...tasksArr];
 
     const getTaskById = id => tasksArr.filter(taskObj => id === taskObj.id);
@@ -134,5 +129,16 @@ const newTaskEventAdder = () => {
     });
 }
 
+const focusViewDeleteEvent = () => {
+
+}
+
+document.body.addEventListener('click', e => {
+    if(e.target.getAttribute('id') !== 'focusViewDelete'){return}
+    const targetElement = e.target.closest('[data-idfocus]');
+    const targetId = targetElement.getAttribute('data-idfocus');
+    taskEventFuncs.deleteTask(targetId);
+    console.table(tasksList.getCurrentArr(), taskIdController.getList());
+})
 
 export {taskController, tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder};
