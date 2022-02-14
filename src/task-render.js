@@ -58,6 +58,7 @@ const taskFocusedViewCard = (taskId) => {
 
     const focusViewCard = document.createElement('div');
     focusViewCard.setAttribute('class', 'focusViewCard');
+    focusViewCard.setAttribute('data-idfocus', taskId)
     
     const closeBtn = document.createElement('button');
     closeBtn.setAttribute('class', 'focusViewCloseBtn')
@@ -96,12 +97,12 @@ const taskFocusedViewCard = (taskId) => {
     dateLabel.innerHTML = 'Due date:'
 
     const deleteTask = document.createElement('button');
-    deleteTask.setAttribute('id','newTaskCancel');
+    deleteTask.setAttribute('id','focusViewDelete');
     deleteTask.setAttribute('type','button');
     deleteTask.innerHTML = 'delete';
 
     const submit = document.createElement('button');
-    submit.setAttribute('id','newTaskSubmit');
+    submit.setAttribute('id','focusViewSubmit');
     submit.setAttribute('type','submit');
     submit.innerHTML = 'save';
     
@@ -144,5 +145,25 @@ const focusViewCloseEvents = () => {
 }
 
 focusViewCloseEvents();
+
+//deletes the task from simpleView in dom
+const focusViewDelete = (ev) => {
+    const dataIdElement = ev.target.closest('[data-idfocus]');
+    const dataId = dataIdElement.getAttribute('data-idfocus');
+    const parentNode = document.querySelector('.tasksInnerWrap')
+    //needs to delete from dom, can remove child based on taskid
+    //how else? can empty dom and reload taskList
+    const targetTask = document.querySelector
+    (`[data-id="${dataId}"]`);
+    parentNode.removeChild(targetTask);
+}
+
+document.body.addEventListener('click', ev => {
+    if (ev.target.getAttribute('id') !== 'focusViewDelete'){return}
+    focusViewDelete(ev);
+    document.body.removeChild(document.querySelector('.focusViewWrap'))
+})
+
+
 
 export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler}
