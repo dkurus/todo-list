@@ -1,13 +1,11 @@
 import { tasksList } from "./state-logic";
 
-//currently working on 
-//simple view card will generate one card based on title, desc and due date.
 const simpleViewCard = (taskObj) =>{
     const tasksWrapper = document.querySelector('.tasksInnerWrap')
 
     const card = document.createElement('div');
     card.setAttribute('class', 'taskSimpleCard');
-    card.setAttribute('data-id', `${taskObj.id}`)
+    card.setAttribute('data-id', taskObj.id)
 
     //lets say a user clicks the markComplete button. so event.target.class == markCompleteBtn 
     const markCompleteBtn = document.createElement('button');
@@ -53,8 +51,11 @@ const newTaskSubmitEventHandler = () => {
 //later on i will consider the complications and refactor the code
 // will be used to add an event listener to the taskList container 
 const taskFocusedViewCard = (taskId) => {
-    const taskObj = tasksList.getTaskById(taskId);
-    console.log(taskObj);
+    const [taskObj] = tasksList.getTaskById(taskId);
+    console.log(taskObj); 
+    console.log(taskObj.name)
+    console.log(taskObj.description)
+    console.log(taskObj.dueDate)
 
     const focusViewWrap = document.createElement('div');
     focusViewWrap.setAttribute('class', 'focusViewWrap');
@@ -63,6 +64,7 @@ const taskFocusedViewCard = (taskId) => {
     focusViewCard.setAttribute('class', 'focusViewCard');
     
     const closeBtn = document.createElement('button');
+    closeBtn.setAttribute('class', 'focusViewCloseBtn')
     closeBtn.innerHTML = ('x');
 
     const focusViewForm = document.createElement('form');
@@ -73,24 +75,25 @@ const taskFocusedViewCard = (taskId) => {
     name.setAttribute('name', 'focusTaskName');
     name.setAttribute('placeholder', 'e.g., Pay internet bill');
     name.setAttribute('required', '');
-    name.innerHTML = `${taskObj.name}`;
+    name.setAttribute('value', taskObj.name)
 
     const description = document.createElement('input');
     description.setAttribute('type', 'text');
     description.setAttribute('name', 'focusTaskDescription');
     description.setAttribute('placeholder', 'description');
-    description.innerHTML = `${taskObj.description}`;
+    description.setAttribute('value', taskObj.description)
+    
 
     const notes = document.createElement('textArea');
     notes.setAttribute('type', 'text');
     notes.setAttribute('name', 'focusTaskNotes');
     notes.setAttribute('placeholder', 'comments');
-    notes.innerHTML = `${taskObj.notes}`;
+    notes.setAttribute('value', taskObj.notes);
 
     const dueDate = document.createElement ('input');
     dueDate.setAttribute('name', 'focusDueDate')
     dueDate.setAttribute('type', 'date');
-    dueDate.innerHTML = `${taskObj.dueDate}`;
+    dueDate.setAttribute('value', taskObj.dueDate);
 
     const dateLabel = document.createElement('label');
     dateLabel.setAttribute('for', 'focusDueDate')
@@ -125,8 +128,25 @@ const focusViewEventHandler = () => {
     container.addEventListener('click', e => {
         const clickedTask = e.target.closest('[data-id]');
         const dataIdValue = clickedTask.getAttribute('data-id');
-        console.log(dataIdValue); // 1
         taskFocusedViewCard(dataIdValue);
     })
 }
+
+//what do i need now? i need functions to handle the events for focus view. this will mean deleting, editing, and closing the focused view. lets start with closing. 
+//close 
+const focusViewCloseEvents = () => {
+    document.body.addEventListener('click', e => {
+        if (e.target.getAttribute('class')!== 'focusViewCloseBtn'){return}
+        document.body.removeChild(e.target.closest('.focusViewWrap'));
+    })
+
+    //if they click outside the form, closes the card. b.c the wrapper spans whole page.
+    document.body.addEventListener('click', e => {
+        if (e.target.getAttribute('class') !== 'focusViewWrap'){return}
+        document.body.removeChild(document.querySelector('.focusViewWrap'));
+    })
+}
+
+focusViewCloseEvents();
+
 export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler}
