@@ -52,10 +52,6 @@ const newTaskSubmitEventHandler = () => {
 // will be used to add an event listener to the taskList container 
 const taskFocusedViewCard = (taskId) => {
     const [taskObj] = tasksList.getTaskById(taskId);
-    console.log(taskObj); 
-    console.log(taskObj.name)
-    console.log(taskObj.description)
-    console.log(taskObj.dueDate)
 
     const focusViewWrap = document.createElement('div');
     focusViewWrap.setAttribute('class', 'focusViewWrap');
