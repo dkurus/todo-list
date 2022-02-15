@@ -1,40 +1,25 @@
 const tasksList = (() => {
     let tasksArr = [
         {
-            name: 'name1',
-            description: 'des1',
-            dueDate: 'due1',
-            id: '0'
+            name: 'name4',
+            description: 'des4',
+            dueDate: 'due4',
+            id: '4'
         },
         {
             name: 'name2',
             description: 'des2',
             dueDate: 'due2',
+            id: '2'
+        },
+        {
+            name: 'name1',
+            description: 'des1',
+            dueDate: 'due1',
             id: '1'
         }
     ];
-    const add = (taskObj) => {
-        tasksArr.push(taskObj);
-    };
-    //change to recreate new array? so that we follow immutability principles
-    const remove = taskId => {
-        tasksArr = tasksArr.filter(taskObj => taskObj.id !== taskId);
-    }
-    const getCurrentArr = () => [...tasksArr];
-
-    const getTaskById = id => tasksArr.filter(taskObj => id === taskObj.id);
-
-    return {
-        add,
-        remove,
-        getCurrentArr,
-        getTaskById
-    };
-})();
-
-//a controller to manage the tasks
-const taskController = (() => {
-    const create = (name, description, note, project = 'default', priority, dueDate) => {
+    const create = (name, description, note, project = 'default', priority = 'default', dueDate) => {
         return {
             name,
             description,
@@ -44,22 +29,35 @@ const taskController = (() => {
             dueDate
         };
     };
-    const edit = (taskID) => {
-        console.log('editing task');
-    }; 
 
-    return {
-        create,
-        edit,
+    const add = (taskObj) => {
+        tasksArr.push(taskObj);
     };
 
+    const remove = taskId => {
+        tasksArr = tasksArr.filter(taskObj => taskObj.id !== taskId);
+    }
+    const getCurrentArr = () => [...tasksArr];
+
+    const getTaskById = id => tasksArr.filter(taskObj => id === taskObj.id);
+
+    const sortList = () => {
+        tasksArr.sort ((a,b) => {
+            if (a.id < b.id) {return -1}
+        })
+    }
+    
+    return {
+        create,
+        add,
+        remove,
+        getCurrentArr,
+        getTaskById,
+        sortList
+    };
 })();
 
 const taskIdController = (() => {
-    //problem: setAttribute forces data-att to be string. when we create tasks it will always need a unique id... what if we only add new id's. even when deleting old ones we don't change anything. lets consider editing ids. the user has form open and it has event listeners. what would they do/ dom: change the values without changing the order of tasks    state: change the state. the way the dom is rendered just iterates over the array. what if we went in numerical task order. 
-    // the problem is how to keep the tasklist in order while editing.i think... the answer lays in the id. no wait. even if i get the Id right the object will be pushed into the end of the array. unless i can.. sort.. the array by project id value. 
-    // so if i manage the id correctly (edit: keeps same id) add(gen new id) delete(test to see what needs to happen) then we can sort the array before generating it. when should the list be sorted? it won't go out of order unless we edit i think. so around then. it should happen in the state module.once thats all sorted (hah) the taskList can be cleared and regen'd and it should be in order. 
-    //ok so  createId needs to be an int. everything else can be a string. tbh i think its easier for id to be a string right now. but as i add more features i may need id to be an int to play around with it. 
     let list = ['0','1'];
     const createID = () => {
         //if list is empty,highestID start at -1, so newID begins at 0
@@ -67,9 +65,9 @@ const taskIdController = (() => {
         list.push(highestIdPlusOne)
         return (highestIdPlusOne);
     };
-    const assignID = (obj) => {
-        obj.id = createID();
-    };
+    const assignID = obj => obj.id = createID();
+    
+    const manualAssignment = (taskId, obj) => obj.id = taskId;
 
     const removeID = (taskID) => {
         list = list.filter(eachID => eachID !== taskID);
@@ -78,27 +76,63 @@ const taskIdController = (() => {
     return {
         assignID,
         removeID,
-        getList
+        getList,
+        manualAssignment
     };
 })()
 
 const taskEventFuncs = (() => {
     const createTask = () => {
         const task = getNewTaskFormValues();
-        const taskObj = taskController.create(task.name, task.description, task.notes, 'default', 'important', task.dueDate);
+        const taskObj = tasksList.create(task.name, task.description, task.notes, 'default', 'important', task.dueDate);
         taskIdController.assignID(taskObj);
         tasksList.add(taskObj);
     };
 
-    const deleteTask = (taskID) => {
-        taskIdController.removeID(taskID);
-        tasksList.remove(taskID);
+    const deleteTask = (taskId) => {
+        taskIdController.removeID(taskId);
+        tasksList.remove(taskId);
     }
    
+    const editTask = taskId => {
+        tasksList.remove(taskId);
+        
+        const [targetTask] = tasksList.getTaskById(taskId);
+        //ok so we have the target task stored, so now we need to form input values
+        // what are we trying to do? we want to create a new task obj to replace the old one.. what does this mean..? we have to target the oldTask and delete it by id. then we create a newTask and append it to the task list. followed by sorting the taskList
+        targetTask.name = document.querySelector("input[name='focusTaskName']").value;
+
+        targetTask.description = document.querySelector("input[name='focusTaskDescription']").value;
+
+        targetTask.notes = document.querySelector("input[name='focusTaskNotes']").value;
+
+        targetTask.dueDate = document.querySelector("input[name='focusDueDate']").value;
+
+        targetTask.id = taskId;
+
+        const updatedTaskObj = tasksList.createTask(
+            targetTask.name,
+            targetTask.description,
+            targetTask.notes,
+            'default',
+            'default',
+            targetTask.dueDate,
+        )
+
+        taskIdController.manualAssignment(targetTask.id, updatedTaskObj);
+
+        tasksList.add(updatedTask)
+
+
+        console.log (targetTask.name);
+        console.log(taskId)
+        
+    }
 
     return {
         createTask,
-        deleteTask
+        deleteTask,
+        editTask
     };
 })();
 // const projectsList = (() => {
@@ -133,12 +167,20 @@ const focusViewDeleteEvent = () => {
 
 }
 
+//to remove task and id from lists
 document.body.addEventListener('click', e => {
     if(e.target.getAttribute('id') !== 'focusViewDelete'){return}
-    const targetElement = e.target.closest('[data-idfocus]');
-    const targetId = targetElement.getAttribute('data-idfocus');
+    const targetTask = e.target.closest('[data-idfocus]');
+    const targetId = targetTask.getAttribute('data-idfocus');
     taskEventFuncs.deleteTask(targetId);
     console.table(tasksList.getCurrentArr(), taskIdController.getList());
 })
 
-export {taskController, tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder};
+
+document.body.addEventListener('click', e => {
+    if (e.target.getAttribute('id')!=='focusViewSubmit'){return};
+    const targetTask = e.target.closest('[data-idfocus]');
+    const targetId = targetTask.getAttribute('data-idfocus');
+    taskEventFuncs.editTask(targetId);
+})
+export {tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder};
