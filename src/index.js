@@ -2,6 +2,7 @@ import { taskController, tasksList, taskEventFuncs, taskIdController, getNewTask
 from "./state-logic";
 import {initialPageLoad} from "./landing-page";
 import { newTaskSubmitEventHandler, renderAllTasksSimpleView, focusViewEventHandler, focusViewCloseEvents} from "./task-render";
+import { makeProjectList } from "./projects-render";
 import './styles.css';
 
 initialPageLoad();

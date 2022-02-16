@@ -163,6 +163,13 @@ document.body.addEventListener('click', ev => {
     document.body.removeChild(document.querySelector('.focusViewWrap'))
 })
 
+//ok so we need a submit button eveent listener for dom. i think since the state taskList is sorted correctly, we can just delete and reload the dom with the function made up top earlier, plus we want to close the focus view card. there should be a func fo rthat
 
+document.body.addEventListener('click', ev => {
+    //if it wasn't the submit button return. we can target submit button with..? button[id=...]
+    if(ev.target.getAttribute('id')!=='focusViewSubmit'){return}
+    regenerateTaskList();
+    document.body.removeChild(document.querySelector('.focusViewWrap'))
+})
 
 export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler, focusViewCloseEvents}

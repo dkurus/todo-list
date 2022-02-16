@@ -30,9 +30,7 @@ const tasksList = (() => {
         };
     };
 
-    const add = (taskObj) => {
-        tasksArr.push(taskObj);
-    };
+    const add = taskObj => tasksArr = [...tasksArr, taskObj];
 
     const remove = taskId => {
         tasksArr = tasksArr.filter(taskObj => taskObj.id !== taskId);
@@ -67,7 +65,6 @@ const taskIdController = (() => {
     };
     const assignID = obj => obj.id = createID();
     
-    const manualAssignment = (taskId, obj) => obj.id = taskId;
 
     const removeID = (taskID) => {
         list = list.filter(eachID => eachID !== taskID);
@@ -76,8 +73,7 @@ const taskIdController = (() => {
     return {
         assignID,
         removeID,
-        getList,
-        manualAssignment
+        getList
     };
 })()
 
@@ -94,9 +90,9 @@ const taskEventFuncs = (() => {
         tasksList.remove(taskId);
     }
    
+    //to delete taskObj, create new one, and keep same id val
+    //one thing i wonder though, is will this implementation show keep the tasks in order for the dom? lets consider. new tasks will look at the idList, and get an id thats 1+ the highest. edit task doesn't touch the idList. deleteTask, will delete the id of corresponding task. 
     const editTask = taskId => {
-        tasksList.remove(taskId);
-        
         const [targetTask] = tasksList.getTaskById(taskId);
         //ok so we have the target task stored, so now we need to form input values
         // what are we trying to do? we want to create a new task obj to replace the old one.. what does this mean..? we have to target the oldTask and delete it by id. then we create a newTask and append it to the task list. followed by sorting the taskList
@@ -104,13 +100,13 @@ const taskEventFuncs = (() => {
 
         targetTask.description = document.querySelector("input[name='focusTaskDescription']").value;
 
-        targetTask.notes = document.querySelector("input[name='focusTaskNotes']").value;
+        targetTask.notes = document.querySelector("textarea[name='focusTaskNotes']").value;
 
         targetTask.dueDate = document.querySelector("input[name='focusDueDate']").value;
 
         targetTask.id = taskId;
 
-        const updatedTaskObj = tasksList.createTask(
+        const updatedTaskObj = tasksList.create(
             targetTask.name,
             targetTask.description,
             targetTask.notes,
@@ -118,14 +114,17 @@ const taskEventFuncs = (() => {
             'default',
             targetTask.dueDate,
         )
+        //we don't need reference to oldTask anymore and we don't want duplicate tasks
+        tasksList.remove(taskId);
 
-        taskIdController.manualAssignment(targetTask.id, updatedTaskObj);
+        //the new obj should have same id as old
+        updatedTaskObj.id = taskId;
+        tasksList.add(updatedTaskObj)
 
-        tasksList.add(updatedTask)
-
-
-        console.log (targetTask.name);
-        console.log(taskId)
+        //the order of taskLists needs to be maintained for dom
+        tasksList.sortList();
+       
+        console.log (tasksList.getCurrentArr())
         
     }
 
@@ -183,4 +182,29 @@ document.body.addEventListener('click', e => {
     const targetId = targetTask.getAttribute('data-idfocus');
     taskEventFuncs.editTask(targetId);
 })
-export {tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder};
+
+
+const projectList = (() =>{
+    let list = [
+        'calculus',
+        'coding',
+        'chores'
+    ];
+    const add = projectName => list = [...list, projectName];
+    const getList = () => [...list];
+
+    return {
+        add,
+        getList
+    }
+})();
+
+
+document.body.addEventListener('keyup', e => {
+    //to run, it has to be an input element inside the project nav 
+    if (e.target.closest('.projectNav') == null && e.target.tagName !== 'INPUT'){return}
+    const projectValue = e.target.value;
+    projectList.add(projectValue);
+    console.log(projectList.getList());    
+})
+export {tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder, projectList};

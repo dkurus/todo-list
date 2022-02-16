@@ -15,7 +15,12 @@
 
 .newTaskCard > form {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+}
+[name="taskName"],
+[name="taskDescription"], 
+[name="taskNotes"] {
+    width: 100%;
 }
 
 .taskSimpleCard {
