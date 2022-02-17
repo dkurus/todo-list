@@ -5,10 +5,12 @@ const projectList = (() =>{
         'chores'
     ];
     const add = projectName => list = [...list, projectName];
+    const remove = projectName => list = list.filter(item => item !== projectName)
     const getList = () => [...list];
-
+    
     return {
         add,
+        remove,
         getList
     }
 })();
@@ -26,12 +28,19 @@ document.body.addEventListener('submit', e => {
         alert('that project already exists!')
         return
     }
-    const projectUl = document.querySelector('#projectUl');
-    projectUl.innerHTML = '';
     projectList.add(newProjectInput.value);
     console.log(projectList.getList());
-      
 })
+
+//current task is to delete projects from state on delete button click using e.target. data-projectName
+document.body.addEventListener('click', e => {
+    if(e.target.getAttribute('data-projectName') == null){return}
+    const targetProject = e.target.getAttribute('data-projectName');
+    projectList.remove(targetProject)
+    console.log(targetProject);
+    console.log(projectList.getList());
+
+} )
 
 
 export {projectList};

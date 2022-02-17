@@ -1,4 +1,5 @@
 import { tasksList } from "./tasks-state";
+import { projectList } from "./projects-state";
 
 const simpleViewCard = (taskObj) =>{
     const tasksWrapper = document.querySelector('.tasksInnerWrap')
@@ -157,18 +158,23 @@ const focusViewDelete = (ev) => {
     parentNode.removeChild(targetTask);
 }
 
+//used to update project options in newtask form dynamically
+const getProjectOptionElements = () => {
+    const currentList = projectList.getList(); //should be array
+    return currentList.map(listItem => {
+        const currentItem = document.createElement('option');
+        currentItem.setAttribute('value', listItem);
+        currentItem.innerHTML = listItem;
+        return currentItem;
+    })
+}
+
 document.body.addEventListener('click', ev => {
     if (ev.target.getAttribute('id') !== 'focusViewDelete'){return}
     focusViewDelete(ev);
     document.body.removeChild(document.querySelector('.focusViewWrap'))
 })
 
-//ok so we need a submit button eveent listener for dom. i think since the state taskList is sorted correctly, we can just delete and reload the dom with the function made up top earlier, plus we want to close the focus view card. there should be a func fo rthat
-
-//my currenttask si to wire up the input event listener. to do that i first need to grab the element. so i need to give it a class. or i can use a combinator selector 
-
-
-// i
 document.body.addEventListener('click', ev => {
     //if it wasn't the submit button return. we can target submit button with..? button[id=...]
     if(ev.target.getAttribute('id')!=='focusViewSubmit'){return}
@@ -176,9 +182,30 @@ document.body.addEventListener('click', ev => {
     document.body.removeChild(document.querySelector('.focusViewWrap'))
 })
 
+//i might need 2 events, one for the form submit, the other for the delete. well essentially they do similar things? in the end need a function that renders the list based on the updated state. state should always be correct. ok so i already have the code to generate the elements. just need to correct the eventlistener lets make 2 right now. the first one should be for adding new project button so that will be submit we can create oone function that does what? it should delete the old option elements. the getelements function will return an array of the elements based on the current list which should be updated. remains to be seen. with that array of elements. i need to append them to the list. after clearing the list
+const deleteProjectInputs = () => document.querySelector('#whichProject').innerHTML = '';
 
-document.body.addEventListener('click', e => {
-    if(e.target.getAttribute('data-projectName') == null){return}
-    console.log(e.target.getAttribute('data-projectName'))
-})
+const loadProjectInputs = () => {
+    const selectProjectInput = document.querySelector('#whichProject')
+    getProjectOptionElements().forEach(element => {
+        selectProjectInput.appendChild(element);
+    });
+}
+
+//to update the project list on addition in new task form
+document.body.addEventListener('submit', ev => {
+    if(ev.target.closest('form').getAttribute('id') !== 'newProjectForm'){return}
+    deleteProjectInputs();
+    loadProjectInputs();  
+} )
+
+//to update project list on delete in new task form
+document.body.addEventListener('click', ev => {
+    if(ev.target.getAttribute('data-projectname') == null){return}
+    deleteProjectInputs();
+    loadProjectInputs();    
+} )
+
+
+
 export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler, focusViewCloseEvents}
