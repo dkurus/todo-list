@@ -17,9 +17,25 @@ tasksList
 \\\\\\\\\\\
 today tast list
 1. add event listener to input element oon project list  
-- when user hits enter, take input, add it to list
-- each list item comes with a delete button and a unique id to target it
-- event listener should also update the new Task projects list
+! when user hits enter, take input, add it to list 
+! render and delete list each time new project is added 
+! each list item comes with an extra element that lets you delete. that extra element has an data-project with the projects name value.
+! write eventlistener that lets you delete project from list, 
+! event listener should also update the new Task projects list during adds and deletes
+! make it so, default is always the first option in the input selection
+    - hmm, default should have a slightly different behavior than the others. 
+    - firstly it won't come with a delete button...
+    - secondly it will always be the first option ...
+    - to implement this.. we might have to make a seperate thing for it.
+    - it won't exist in the project list. or it could on initial load. i just need to add an exception on the loop that renders the delete buttons. 
+! state needs to reflect the new form elements in new task 
+    - priority
+    - project
+- edit task form needs to create the project and priority list as well
 - edit task needs to get the form elements for project list (very similar to the one alrady made)
 - regenerate tasklist should be modified to show only current project
 - default project will be called default and cannot be deleted. all things will go do default if not specified. 
+
+
+for later
+- delete project button should delete its containing tasks

@@ -19,7 +19,7 @@ const tasksList = (() => {
             id: '1'
         }
     ];
-    const create = (name, description, note, project = 'default', priority = 'default', dueDate) => {
+    const create = (name, description, note, project, priority, dueDate) => {
         return {
             name,
             description,
@@ -81,7 +81,7 @@ const taskIdController = (() => {
 const taskEventFuncs = (() => {
     const createTask = () => {
         const task = getNewTaskFormValues();
-        const taskObj = tasksList.create(task.name, task.description, task.notes, 'default', 'important', task.dueDate);
+        const taskObj = tasksList.create(task.name, task.description, task.notes, task.project, task.priority, task.dueDate);
         taskIdController.assignID(taskObj);
         tasksList.add(taskObj);
     };
@@ -148,7 +148,9 @@ const getNewTaskFormValues = () => {
         name: document.querySelector("input[name='taskName']").value,
         description: document.querySelector("input[name='taskDescription']").value,
         notes: document.querySelector("textArea[name='taskNotes']").value,
-        dueDate: document.querySelector("input[name='dueDate']").value,
+        project: document.querySelector("#whichProject").value,
+        priority: document.querySelector("#priorityInput").value,
+        dueDate: document.querySelector("input[name='dueDate']").value
     }
 }
 
@@ -160,11 +162,9 @@ const newTaskEventAdder = () => {
         taskEventFuncs.createTask();
         document.querySelector("form[id='newTaskForm']").reset();
     });
+    console.log(tasksList.getCurrentArr());
 }
 
-const focusViewDeleteEvent = () => {
-
-}
 
 //to remove task and id from lists
 document.body.addEventListener('click', e => {
@@ -172,7 +172,6 @@ document.body.addEventListener('click', e => {
     const targetTask = e.target.closest('[data-idfocus]');
     const targetId = targetTask.getAttribute('data-idfocus');
     taskEventFuncs.deleteTask(targetId);
-    console.table(tasksList.getCurrentArr(), taskIdController.getList());
 })
 
 
@@ -183,15 +182,5 @@ document.body.addEventListener('click', e => {
     taskEventFuncs.editTask(targetId);
 })
 
-
-
-document.body.addEventListener('keyup', e => {
-    //to run, it has to be an input element inside the project nav 
-    if(e.keycode !== 13){return}
-    if (e.target.closest('.projectNav') == null && e.target.tagName !== 'INPUT'){return}
-    const projectValue = e.target.value;
-    projectList.add(projectValue);
-    console.log(projectList.getList());    
-})
 
 export {tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder};

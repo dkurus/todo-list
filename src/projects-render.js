@@ -37,8 +37,10 @@ const makeProjectList = () => {
     newProjectForm.appendChild(newProjectBtn);
 }
 
+
+
 const renderProjectItems = () => {
-    let listContainer = document.querySelector('#projectUl')
+    const listContainer = document.querySelector('#projectUl')
     const allCurrentProjects = projectList.getList();
     //what am i tryna doo? i want a function that takes a project string item, and uses it to create a li element and append it.
     const renderProjectItem = project => {
@@ -55,6 +57,13 @@ const renderProjectItems = () => {
     }
 
     allCurrentProjects.forEach(project => {
+      if (project === 'Default'){
+        const itemWrapper = document.createElement('div')
+        itemWrapper.setAttribute('class', 'projectItemWrap');
+        itemWrapper.appendChild(renderProjectItem(project));
+        listContainer.appendChild(itemWrapper);
+        return;
+      }
       const itemWrapper = document.createElement('div')
       itemWrapper.setAttribute('class', 'projectItemWrap');
       itemWrapper.appendChild(renderProjectItem(project));
@@ -67,6 +76,9 @@ const deleteProjectItems = () => {
     const projectUl = document.querySelector('#projectUl');
     projectUl.innerHTML = '';
 }
+
+
+
 
 // how should we create and display the project list? we will have to be able to delete them as well and handle those cases. probably similiar to the way we handled tasks. that means the projects will need an id as well..
 
