@@ -168,7 +168,7 @@ document.body.addEventListener('click', ev => {
 //my currenttask si to wire up the input event listener. to do that i first need to grab the element. so i need to give it a class. or i can use a combinator selector 
 
 
-
+// i
 document.body.addEventListener('click', ev => {
     //if it wasn't the submit button return. we can target submit button with..? button[id=...]
     if(ev.target.getAttribute('id')!=='focusViewSubmit'){return}
@@ -176,4 +176,9 @@ document.body.addEventListener('click', ev => {
     document.body.removeChild(document.querySelector('.focusViewWrap'))
 })
 
+
+document.body.addEventListener('click', e => {
+    if(e.target.getAttribute('data-projectName') == null){return}
+    console.log(e.target.getAttribute('data-projectName'))
+})
 export {renderAllTasksSimpleView, newTaskSubmitEventHandler, focusViewEventHandler, focusViewCloseEvents}

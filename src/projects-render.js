@@ -39,30 +39,51 @@ const makeProjectList = () => {
 
 const renderProjectItems = () => {
     let listContainer = document.querySelector('#projectUl')
-    console.log(listContainer)
     const allCurrentProjects = projectList.getList();
-    allCurrentProjects.forEach(project => {
+    //what am i tryna doo? i want a function that takes a project string item, and uses it to create a li element and append it.
+    const renderProjectItem = project => {
         const listItem = document.createElement('li');
         listItem.innerHTML = project;
         listItem.setAttribute('class', 'projectItem')
-        listContainer.appendChild(listItem);
+        return listItem;
+    }
+    const projectRemoveButton = project => {
+        const removeBtn = document.createElement('button');
+        removeBtn.innerHTML = 'x';
+        removeBtn.setAttribute('data-projectName', project);
+        return removeBtn;
+    }
+
+    allCurrentProjects.forEach(project => {
+      const itemWrapper = document.createElement('div')
+      itemWrapper.setAttribute('class', 'projectItemWrap');
+      itemWrapper.appendChild(renderProjectItem(project));
+      itemWrapper.appendChild(projectRemoveButton(project));
+      listContainer.appendChild(itemWrapper);
     })
+}
+
+const deleteProjectItems = () => { 
+    const projectUl = document.querySelector('#projectUl');
+    projectUl.innerHTML = '';
 }
 
 // how should we create and display the project list? we will have to be able to delete them as well and handle those cases. probably similiar to the way we handled tasks. that means the projects will need an id as well..
 
-//problem, 
 document.body.addEventListener('submit', e => {
     e.preventDefault();
     if(e.target.closest('form').getAttribute('id') !== 'newProjectForm'){return}
-    const projectUl = document.querySelector('#projectUl');
-    projectUl.innerHTML = '';
+    deleteProjectItems();
     renderProjectItems();
-    e.target.closest('form').reset();
-    
+    e.target.closest('form').reset(); 
 })
 
-//tmrw debug, why isn't eventlistener rendering updated taskList?
+// how should i delete... i think actually, just use regenerate task list? after clearing the dom?
+document.body.addEventListener('click', e => {
+    if(e.target.getAttribute('data-projectName') == null){return}
+    deleteProjectItems();
+    renderProjectItems();
+})
 
 
 

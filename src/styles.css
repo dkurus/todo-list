@@ -62,3 +62,23 @@
     margin: auto;
     
 }
+
+#projectUl {
+    display: table;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.projectItem {
+    display: flex;
+    align-items: center;
+}
+
+.projectItemWrap {
+    display: flex;
+    padding: 4px;
+}
+
+.projectItemWrap > button {
+    margin-left: 5px;
+}
