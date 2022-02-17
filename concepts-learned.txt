@@ -2,6 +2,8 @@
 - event object
 - delegation
 - bubbling phase (propagation) vs capturing phase
+- event.target is the property where the event source is stored
+- event.target.closest will look for elements matching selector in the parents linearly
 
 2. css
 
@@ -20,8 +22,16 @@
 
 8. webpack should be set in development mode while developing for features like debugger to work properly.
 
+9. used array destructuring to get an object out after filtering
+
+10. used array.sort to arrange taskList to maintain order in dom display
+
 WHAT I WANT TO LEARN ABOUT
 
 1. <this> keyword 
 - when is it useful
 - where can i use it 
+
+2. how to make addTask not clickable similar todoist while title input is empty
+- while title input is empty add button is greyed out
+- if mouse hover on add button while input empty, display declined (x) symbol as mouse pointer

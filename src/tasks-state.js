@@ -55,8 +55,9 @@ const tasksList = (() => {
     };
 })();
 
+//whats the problem. how can we delete tasks without an id system? we could go by name but what if they make duplicates. remove ability to make duplicates? lets first consider this. what features do we want? when the user clicks a project it should simply show all the tasks associated with it. the user should also be able to delete projects. and edit the projects name. in which case each project label should come with 2 buttons, edit and delete. i think i will make it so that duplicate project names cannot be added. and then target projects in state and dom with the project names
 const taskIdController = (() => {
-    let list = ['0','1'];
+    let list = [];
     const createID = () => {
         //if list is empty,highestID start at -1, so newID begins at 0
         const highestIdPlusOne = ((list.length === 0 ? -1 : list[list.length-1]) + 1).toString();
@@ -127,7 +128,6 @@ const taskEventFuncs = (() => {
         console.log (tasksList.getCurrentArr())
         
     }
-
     return {
         createTask,
         deleteTask,
@@ -184,27 +184,14 @@ document.body.addEventListener('click', e => {
 })
 
 
-const projectList = (() =>{
-    let list = [
-        'calculus',
-        'coding',
-        'chores'
-    ];
-    const add = projectName => list = [...list, projectName];
-    const getList = () => [...list];
-
-    return {
-        add,
-        getList
-    }
-})();
-
 
 document.body.addEventListener('keyup', e => {
     //to run, it has to be an input element inside the project nav 
+    if(e.keycode !== 13){return}
     if (e.target.closest('.projectNav') == null && e.target.tagName !== 'INPUT'){return}
     const projectValue = e.target.value;
     projectList.add(projectValue);
     console.log(projectList.getList());    
 })
-export {tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder, projectList};
+
+export {tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder};

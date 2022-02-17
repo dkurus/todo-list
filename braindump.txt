@@ -1,0 +1,25 @@
+//ok next is projects....
+// every task needs a project property... 
+// well first, whats the problem? 
+1. clicking a project name should display all the tasks with that project-name property.
+2. active project name should display the currently clicked tab
+3. newTask button needs a drop-list to select project(state+dom)
+4. editTask button needs a drop-list to select project(state+dom)
+
+tasksList
+1. lets start with new task adding project to state
+2. render project list in desginated area.
+3. modifying regenerate task list to show only taskObjs of clicked project
+4. edit task 
+
+
+
+\\\\\\\\\\\
+today tast list
+1. add event listener to input element oon project list  
+- when user hits enter, take input, add it to list
+- each list item comes with a delete button and a unique id to target it
+- event listener should also update the new Task projects list
+- edit task needs to get the form elements for project list (very similar to the one alrady made)
+- regenerate tasklist should be modified to show only current project
+- default project will be called default and cannot be deleted. all things will go do default if not specified. 

@@ -1,4 +1,4 @@
-import { tasksList } from "./state-logic";
+import { tasksList } from "./tasks-state";
 
 const simpleViewCard = (taskObj) =>{
     const tasksWrapper = document.querySelector('.tasksInnerWrap')
@@ -164,6 +164,10 @@ document.body.addEventListener('click', ev => {
 })
 
 //ok so we need a submit button eveent listener for dom. i think since the state taskList is sorted correctly, we can just delete and reload the dom with the function made up top earlier, plus we want to close the focus view card. there should be a func fo rthat
+
+//my currenttask si to wire up the input event listener. to do that i first need to grab the element. so i need to give it a class. or i can use a combinator selector 
+
+
 
 document.body.addEventListener('click', ev => {
     //if it wasn't the submit button return. we can target submit button with..? button[id=...]

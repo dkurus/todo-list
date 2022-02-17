@@ -1,9 +1,11 @@
 import { taskController, tasksList, taskEventFuncs, taskIdController, getNewTaskFormValues, newTaskEventAdder } 
-from "./state-logic";
+from "./tasks-state";
+import { projectList } from "./projects-state";
 import {initialPageLoad} from "./landing-page";
 import { newTaskSubmitEventHandler, renderAllTasksSimpleView, focusViewEventHandler, focusViewCloseEvents} from "./task-render";
-import { makeProjectList } from "./projects-render";
+import { makeProjectList, renderProjectItems } from "./projects-render";
 import './styles.css';
+
 
 initialPageLoad();
 newTaskEventAdder();
@@ -12,3 +14,4 @@ focusViewEventHandler();
 focusViewCloseEvents();
 renderAllTasksSimpleView();
 tasksList.getCurrentArr();
+renderProjectItems();

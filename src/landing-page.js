@@ -1,5 +1,6 @@
-import { taskIdController, projectList} from "./state-logic";
+import { taskIdController} from "./tasks-state";
 import { makeProjectList } from "./projects-render";
+import { projectList } from "./projects-state";
 
 const initialPageLoad = () => {
     const contentWrapper = document.createElement('div');
