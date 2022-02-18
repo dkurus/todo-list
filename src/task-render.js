@@ -65,12 +65,13 @@ const taskFocusedViewCard = (taskId) => {
     const focusViewWrap = document.createElement('div');
     focusViewWrap.setAttribute('class', 'focusViewWrap');
 
-    const focusViewCard = document.createElement('div');
+    const focusViewCard = document.createElement('form');
     focusViewCard.setAttribute('class', 'focusViewCard');
     focusViewCard.setAttribute('data-idfocus', taskId)
     
     const closeBtn = document.createElement('button');
     closeBtn.setAttribute('class', 'focusViewCloseBtn')
+    closeBtn.setAttribute('type','button');
     closeBtn.innerHTML = ('x');
 
     const focusViewForm = document.createElement('form');
@@ -97,10 +98,12 @@ const taskFocusedViewCard = (taskId) => {
     notes.setAttribute('value', taskObj.notes);
 
     //cretae project and priority list. can i import it from project render?
-    const projectSelect = document.createElement('select')
-    projectSelect.setAttribute('id', 'editProjectInput')
+    const projectSelect = document.createElement('select');
+    projectSelect.setAttribute('id', 'editProjectInput');
+   //we should set the selected attribute on the option that matches the project.priority value
 
-    const optionElements = getProjectOptionElements();
+
+    const projectOptionElements = getProjectOptionElements();
 
     const projectInputLabel = document.createElement('label');
     projectInputLabel.setAttribute('for', 'editProjectInput');
@@ -119,6 +122,10 @@ const taskFocusedViewCard = (taskId) => {
         const currentOption = document.createElement('option');
         currentOption.setAttribute('value', itemName);
         currentOption.innerHTML = itemName;
+        //to place the users previous selection first
+        if (itemName === taskObj.priority){
+            currentOption.setAttribute('selected', '');
+        }
         return currentOption;
     })
 
@@ -151,7 +158,8 @@ const taskFocusedViewCard = (taskId) => {
     focusViewCard.appendChild(notes);
     focusViewCard.appendChild(projectInputLabel);
     focusViewCard.appendChild(projectSelect);
-    optionElements.forEach(element => {
+    projectOptionElements.forEach(element => {
+        if(element.value === taskObj.project){element.setAttribute('selected','')};
         element.setAttribute('class', 'editOptionElement');
         projectSelect.appendChild(element)
     })

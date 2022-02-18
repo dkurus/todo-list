@@ -84,6 +84,11 @@ const taskEventFuncs = (() => {
 
         targetTask.notes = document.querySelector("textarea[name='focusTaskNotes']").value;
 
+        targetTask.project = 'hi'
+        // document.querySelector('#editProjectInput').value;
+
+        targetTask.priority = document.querySelector('#editpriorityinput').value;
+       
         targetTask.dueDate = document.querySelector("input[name='focusDueDate']").value;
 
         targetTask.id = taskId;
@@ -92,8 +97,8 @@ const taskEventFuncs = (() => {
             targetTask.name,
             targetTask.description,
             targetTask.notes,
-            'default',
-            'default',
+            targetTask.project,
+            targetTask.priority,
             targetTask.dueDate,
         )
         //we don't need reference to oldTask anymore and we don't want duplicate tasks
