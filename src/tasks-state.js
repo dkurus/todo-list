@@ -1,24 +1,5 @@
 const tasksList = (() => {
-    let tasksArr = [
-        {
-            name: 'name4',
-            description: 'des4',
-            dueDate: 'due4',
-            id: '4'
-        },
-        {
-            name: 'name2',
-            description: 'des2',
-            dueDate: 'due2',
-            id: '2'
-        },
-        {
-            name: 'name1',
-            description: 'des1',
-            dueDate: 'due1',
-            id: '1'
-        }
-    ];
+    let tasksArr = [];
     const create = (name, description, note, project, priority, dueDate) => {
         return {
             name,

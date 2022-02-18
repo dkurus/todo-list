@@ -1,6 +1,17 @@
 import { tasksList } from "./tasks-state";
 import { projectList } from "./projects-state";
 
+//used to update project options in newtask form dynamically
+const getProjectOptionElements = () => {
+    const currentList = projectList.getList(); 
+    return currentList.map(listItem => {
+        const currentItem = document.createElement('option');
+        currentItem.setAttribute('value', listItem);
+        currentItem.innerHTML = listItem;
+        return currentItem;
+    })
+}
+
 const simpleViewCard = (taskObj) =>{
     const tasksWrapper = document.querySelector('.tasksInnerWrap')
 
@@ -8,7 +19,6 @@ const simpleViewCard = (taskObj) =>{
     card.setAttribute('class', 'taskSimpleCard');
     card.setAttribute('data-id', taskObj.id)
 
-    //lets say a user clicks the markComplete button. so event.target.class == markCompleteBtn 
     const markCompleteBtn = document.createElement('button');
     markCompleteBtn.setAttribute('class', 'markCompleteBtn');
 
@@ -30,7 +40,7 @@ const simpleViewCard = (taskObj) =>{
     card.appendChild(dueDate);
 }
 
-//render all tasks will use simpleviewcard and iterate over all the task objs
+
 const renderAllTasksSimpleView = () => {
     const taskObjs = tasksList.getCurrentArr();
     taskObjs.forEach(element => simpleViewCard(element));
@@ -49,8 +59,6 @@ const newTaskSubmitEventHandler = () => {
     saveBtn.addEventListener('click', () => {regenerateTaskList()});
 }
 
-//later on i will consider the complications and refactor the code
-// will be used to add an event listener to the taskList container 
 const taskFocusedViewCard = (taskId) => {
     const [taskObj] = tasksList.getTaskById(taskId);
 
@@ -88,6 +96,32 @@ const taskFocusedViewCard = (taskId) => {
     notes.setAttribute('placeholder', 'comments');
     notes.setAttribute('value', taskObj.notes);
 
+    //cretae project and priority list. can i import it from project render?
+    const projectSelect = document.createElement('select')
+    projectSelect.setAttribute('id', 'editProjectInput')
+
+    const optionElements = getProjectOptionElements();
+
+    const projectInputLabel = document.createElement('label');
+    projectInputLabel.setAttribute('for', 'editProjectInput');
+
+    const priorityInput = document.createElement('select');
+    priorityInput.setAttribute('id', 'editpriorityInput');
+
+    const priorityOptions = [
+        'none',
+        'priority 1',
+        'priority 2',
+        'priority 3'
+    ]
+
+    const priorityOptionElements = priorityOptions.map(itemName => {
+        const currentOption = document.createElement('option');
+        currentOption.setAttribute('value', itemName);
+        currentOption.innerHTML = itemName;
+        return currentOption;
+    })
+
     const dueDate = document.createElement ('input');
     dueDate.setAttribute('name', 'focusDueDate')
     dueDate.setAttribute('type', 'date');
@@ -115,6 +149,17 @@ const taskFocusedViewCard = (taskId) => {
     focusViewCard.appendChild(name);
     focusViewCard.appendChild(description);
     focusViewCard.appendChild(notes);
+    focusViewCard.appendChild(projectInputLabel);
+    focusViewCard.appendChild(projectSelect);
+    optionElements.forEach(element => {
+        element.setAttribute('class', 'editOptionElement');
+        projectSelect.appendChild(element)
+    })
+    focusViewCard.appendChild(priorityInput);
+    priorityOptionElements.forEach(element => {
+        priorityInput.appendChild(element);
+    })
+
     focusViewCard.appendChild(dueDate);
     focusViewCard.appendChild(dateLabel);
     focusViewCard.appendChild(deleteTask);
@@ -158,16 +203,7 @@ const focusViewDelete = (ev) => {
     parentNode.removeChild(targetTask);
 }
 
-//used to update project options in newtask form dynamically
-const getProjectOptionElements = () => {
-    const currentList = projectList.getList(); //should be array
-    return currentList.map(listItem => {
-        const currentItem = document.createElement('option');
-        currentItem.setAttribute('value', listItem);
-        currentItem.innerHTML = listItem;
-        return currentItem;
-    })
-}
+
 
 document.body.addEventListener('click', ev => {
     if (ev.target.getAttribute('id') !== 'focusViewDelete'){return}
@@ -176,13 +212,11 @@ document.body.addEventListener('click', ev => {
 })
 
 document.body.addEventListener('click', ev => {
-    //if it wasn't the submit button return. we can target submit button with..? button[id=...]
     if(ev.target.getAttribute('id')!=='focusViewSubmit'){return}
     regenerateTaskList();
     document.body.removeChild(document.querySelector('.focusViewWrap'))
 })
 
-//i might need 2 events, one for the form submit, the other for the delete. well essentially they do similar things? in the end need a function that renders the list based on the updated state. state should always be correct. ok so i already have the code to generate the elements. just need to correct the eventlistener lets make 2 right now. the first one should be for adding new project button so that will be submit we can create oone function that does what? it should delete the old option elements. the getelements function will return an array of the elements based on the current list which should be updated. remains to be seen. with that array of elements. i need to append them to the list. after clearing the list
 const deleteProjectInputs = () => document.querySelector('#whichProject').innerHTML = '';
 
 const loadProjectInputs = () => {
